@@ -13,7 +13,7 @@
 ##  Forked from https://github.com/jackyaz/uiScribe   ##
 ##                                                    ##
 ########################################################
-# Last Modified: 2026-Feb-18
+# Last Modified: 2026-Feb-21
 #-------------------------------------------------------
 
 ###########        Shellcheck directives      ##########
@@ -30,7 +30,7 @@
 ### Start of script variables ###
 readonly SCRIPT_NAME="uiScribe"
 readonly SCRIPT_VERSION="v1.4.13"
-readonly SCRIPT_VERSTAG="26021800"
+readonly SCRIPT_VERSTAG="26022123"
 SCRIPT_BRANCH="develop"
 SCRIPT_REPO="https://raw.githubusercontent.com/AMTM-OSR/$SCRIPT_NAME/$SCRIPT_BRANCH"
 readonly SCRIPT_DIR="/jffs/addons/${SCRIPT_NAME}.d"
@@ -181,18 +181,17 @@ Clear_Lock()
 ##-------------------------------------##
 _AcquireFLock_()
 {
-   local opts=""
-   eval exec "$LR_FLock_FD>$LR_FLock_FName"
-   
-   if [ $# -eq 1 ] && [ "$1" = "nonblock" ]
-   then opts="-n"
+   local opts="-n"
+   if [ $# -gt 0 ] && [ "$1" = "waitblock" ]
+   then opts=""
    fi
-   flock -x $opts "$LR_FLock_FD"
+   eval exec "$LR_FLock_FD>$LR_FLock_FName"
+   flock -x $opts "$LR_FLock_FD" 2>/dev/null
    return "$?"
 }
 
 _ReleaseFLock_()
-{ flock -u "$LR_FLock_FD" ; }
+{ flock -u "$LR_FLock_FD" 2>/dev/null ; }
 
 ##----------------------------------------##
 ## Modified by Martinski W. [2025-Jun-09] ##
