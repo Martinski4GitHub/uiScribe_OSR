@@ -1,7 +1,7 @@
 # uiScribe
 
 ## v1.4.13
-### Updated on 2026-Feb-18
+### Updated on 2026-Feb-22
 
 ## About
 uiScribe updates the System Log page to show log files created by Scribe (syslog-ng). Requires [**Scribe**](https://github.com/cynicastic/scribe)
