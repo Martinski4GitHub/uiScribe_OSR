@@ -13,7 +13,7 @@
 ##  Forked from https://github.com/jackyaz/uiScribe   ##
 ##                                                    ##
 ########################################################
-# Last Modified: 2026-Mar-26
+# Last Modified: 2026-Apr-11
 #-------------------------------------------------------
 
 ###########        Shellcheck directives      ##########
@@ -30,7 +30,7 @@
 ### Start of script variables ###
 readonly SCRIPT_NAME="uiScribe"
 readonly SCRIPT_VERSION="v1.4.14"
-readonly SCRIPT_VERSTAG="26032623"
+readonly SCRIPT_VERSTAG="26041104"
 SCRIPT_BRANCH="develop"
 SCRIPT_REPO="https://raw.githubusercontent.com/AMTM-OSR/$SCRIPT_NAME/$SCRIPT_BRANCH"
 readonly SCRIPT_DIR="/jffs/addons/${SCRIPT_NAME}.d"
@@ -102,6 +102,9 @@ readonly GRNct="\e[1;32m"
 readonly MGNTct="\e[1;35m"
 readonly CLRct="\e[0m"
 ### End of output format variables ###
+
+# Workaround for Entware ELF binaries compiled with RUNPATH #
+unset LD_LIBRARY_PATH
 
 # Give priority to built-in binaries #
 export PATH="/bin:/usr/bin:/sbin:/usr/sbin:$PATH"
