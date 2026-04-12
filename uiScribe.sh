@@ -13,7 +13,7 @@
 ##  Forked from https://github.com/jackyaz/uiScribe   ##
 ##                                                    ##
 ########################################################
-# Last Modified: 2026-Mar-02
+# Last Modified: 2026-Apr-11
 #-------------------------------------------------------
 
 ###########        Shellcheck directives      ##########
@@ -29,9 +29,9 @@
 
 ### Start of script variables ###
 readonly SCRIPT_NAME="uiScribe"
-readonly SCRIPT_VERSION="v1.4.13"
-readonly SCRIPT_VERSTAG="26030223"
-SCRIPT_BRANCH="master"
+readonly SCRIPT_VERSION="v1.4.14"
+readonly SCRIPT_VERSTAG="26041104"
+SCRIPT_BRANCH="develop"
 SCRIPT_REPO="https://raw.githubusercontent.com/AMTM-OSR/$SCRIPT_NAME/$SCRIPT_BRANCH"
 readonly SCRIPT_DIR="/jffs/addons/${SCRIPT_NAME}.d"
 readonly SCRIPT_PAGE_DIR="$(readlink -f /www/user)"
@@ -102,6 +102,9 @@ readonly GRNct="\e[1;32m"
 readonly MGNTct="\e[1;35m"
 readonly CLRct="\e[0m"
 ### End of output format variables ###
+
+# Workaround for Entware ELF binaries compiled with RUNPATH #
+unset LD_LIBRARY_PATH
 
 # Give priority to built-in binaries #
 export PATH="/bin:/usr/bin:/sbin:/usr/sbin:$PATH"
@@ -1506,13 +1509,11 @@ ScriptHeader()
 ##----------------------------------------##
 MainMenu()
 {
-	Create_Dirs
-	Create_Symlinks
 	printf " WebUI for %s is available at:\n ${SETTING}%s${CLRct}\n\n" "$SCRIPT_NAME" "$(Get_WebUI_URL)"
 
 	printf "   ${GRNct}1${CLRct}. Customise list of logs displayed by %s\n\n" "$SCRIPT_NAME"
 	printf "  ${GRNct}rf${CLRct}. Clear user preferences for displayed logs\n\n"
-	printf "   ${GRNct}u${CLRct}. Check for updates\n"
+	printf "   ${GRNct}u${CLRct}. Check for new version updates\n"
 	printf "  ${GRNct}uf${CLRct}. Force update %s with latest version\n\n" "$SCRIPT_NAME"
 	printf "   ${GRNct}e${CLRct}. Exit %s\n\n" "$SCRIPT_NAME"
 	printf "   ${GRNct}z${CLRct}. Uninstall %s\n" "$SCRIPT_NAME"
@@ -1529,6 +1530,7 @@ MainMenu()
 				if Check_Lock menu
 				then
 					Generate_Log_List
+					Create_Symlinks
 					printf "\n"
 					Clear_Lock
 				else
@@ -1858,7 +1860,8 @@ if [ $# -eq 0 ] || [ -z "$1" ]
 then
 	NTP_Ready
 	Entware_Ready
-	if grep -qF '/dev/null' "$userCheckLogList"
+	if [ -s "$userCheckLogList" ] && \
+	   grep -qF '/dev/null' "$userCheckLogList"
 	then
 		sed -i '/\/dev\/null/d' "$userCheckLogList"
 	fi
