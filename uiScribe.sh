@@ -13,7 +13,7 @@
 ##  Forked from https://github.com/jackyaz/uiScribe   ##
 ##                                                    ##
 ########################################################
-# Last Modified: 2026-Apr-11
+# Last Modified: 2026-Apr-15
 #-------------------------------------------------------
 
 ###########        Shellcheck directives      ##########
@@ -29,8 +29,8 @@
 
 ### Start of script variables ###
 readonly SCRIPT_NAME="uiScribe"
-readonly SCRIPT_VERSION="v1.4.14"
-readonly SCRIPT_VERSTAG="26041104"
+readonly SCRIPT_VERSION="v1.4.15"
+readonly SCRIPT_VERSTAG="26041500"
 SCRIPT_BRANCH="develop"
 SCRIPT_REPO="https://raw.githubusercontent.com/AMTM-OSR/$SCRIPT_NAME/$SCRIPT_BRANCH"
 readonly SCRIPT_DIR="/jffs/addons/${SCRIPT_NAME}.d"
@@ -720,7 +720,7 @@ Auto_ServiceEvent()
 	local theScriptFilePath="/jffs/scripts/$SCRIPT_NAME"
 	case $1 in
 		create)
-			if [ -f /jffs/scripts/service-event ]
+			if [ -s /jffs/scripts/service-event ]
 			then
 				STARTUPLINECOUNT="$(grep -c '# '"$SCRIPT_NAME" /jffs/scripts/service-event)"
 				STARTUPLINECOUNTEX="$(grep -cx 'if echo "$2" | /bin/grep -q "'"$SCRIPT_NAME"'"; then { '"$theScriptFilePath"' service_event "$@" & }; fi # '"$SCRIPT_NAME" /jffs/scripts/service-event)"
@@ -729,7 +729,6 @@ Auto_ServiceEvent()
 				then
 					sed -i -e '/# '"$SCRIPT_NAME"'/d' /jffs/scripts/service-event
 				fi
-
 				if [ "$STARTUPLINECOUNTEX" -eq 0 ]
 				then
 					{
@@ -742,11 +741,11 @@ Auto_ServiceEvent()
 				  echo 'if echo "$2" | /bin/grep -q "'"$SCRIPT_NAME"'"; then { '"$theScriptFilePath"' service_event "$@" & }; fi # '"$SCRIPT_NAME"
 				  echo
 				} > /jffs/scripts/service-event
-				chmod 0755 /jffs/scripts/service-event
 			fi
+			chmod 0755 /jffs/scripts/service-event
 		;;
 		delete)
-			if [ -f /jffs/scripts/service-event ]
+			if [ -s /jffs/scripts/service-event ]
 			then
 				STARTUPLINECOUNT="$(grep -c '# '"$SCRIPT_NAME" /jffs/scripts/service-event)"
 				if [ "$STARTUPLINECOUNT" -gt 0 ]
@@ -766,7 +765,7 @@ Auto_Startup()
 	local theScriptFilePath="/jffs/scripts/$SCRIPT_NAME"
 	case $1 in
 		create)
-			if [ -f /jffs/scripts/services-start ]
+			if [ -s /jffs/scripts/services-start ]
 			then
 				STARTUPLINECOUNT="$(grep -c '# '"$SCRIPT_NAME" /jffs/scripts/services-start)"
 				if [ "$STARTUPLINECOUNT" -gt 0 ]
@@ -774,7 +773,7 @@ Auto_Startup()
 					sed -i -e '/# '"$SCRIPT_NAME"'/d' /jffs/scripts/services-start
 				fi
 			fi
-			if [ -f /jffs/scripts/post-mount ]
+			if [ -s /jffs/scripts/post-mount ]
 			then
 				STARTUPLINECOUNT="$(grep -c '# '"$SCRIPT_NAME" /jffs/scripts/post-mount)"
 				STARTUPLINECOUNTEX="$(grep -cx '\[ -x "${1}/entware/bin/opkg" \] && \[ -x '"$theScriptFilePath"' \] && '"$theScriptFilePath"' startup "$@" & # '"$SCRIPT_NAME" /jffs/scripts/post-mount)"
@@ -783,7 +782,6 @@ Auto_Startup()
 				then
 					sed -i -e '/# '"$SCRIPT_NAME"'/d' /jffs/scripts/post-mount
 				fi
-
 				if [ "$STARTUPLINECOUNTEX" -eq 0 ]
 				then
 					{
@@ -796,11 +794,11 @@ Auto_Startup()
 				  echo '[ -x "${1}/entware/bin/opkg" ] && [ -x '"$theScriptFilePath"' ] && '"$theScriptFilePath"' startup "$@" & # '"$SCRIPT_NAME"
 				  echo
 				} > /jffs/scripts/post-mount
-				chmod 0755 /jffs/scripts/post-mount
 			fi
+			chmod 0755 /jffs/scripts/post-mount
 		;;
 		delete)
-			if [ -f /jffs/scripts/services-start ]
+			if [ -s /jffs/scripts/services-start ]
 			then
 				STARTUPLINECOUNT="$(grep -c '# '"$SCRIPT_NAME" /jffs/scripts/services-start)"
 				if [ "$STARTUPLINECOUNT" -gt 0 ]
@@ -808,7 +806,7 @@ Auto_Startup()
 					sed -i -e '/# '"$SCRIPT_NAME"'/d' /jffs/scripts/services-start
 				fi
 			fi
-			if [ -f /jffs/scripts/post-mount ]
+			if [ -s /jffs/scripts/post-mount ]
 			then
 				STARTUPLINECOUNT="$(grep -c '# '"$SCRIPT_NAME" /jffs/scripts/post-mount)"
 				if [ "$STARTUPLINECOUNT" -gt 0 ]
